@@ -1,0 +1,13 @@
+services:
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    volumes:
+      - .:/workspace
+      - maven-cache:/root/.m2
+    working_dir: /workspace
+    command: make build AGENT=1
+
+volumes:
+  maven-cache:
