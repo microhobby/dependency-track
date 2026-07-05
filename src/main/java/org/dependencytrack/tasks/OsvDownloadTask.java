@@ -20,6 +20,7 @@ package org.dependencytrack.tasks;
 
 import alpine.Config;
 import alpine.common.logging.Logger;
+import java.math.BigDecimal;
 import alpine.event.framework.Event;
 import alpine.event.framework.LoggableSubscriber;
 import alpine.model.ConfigProperty;
@@ -746,8 +747,26 @@ public class OsvDownloadTask implements LoggableSubscriber {
         }
         vuln.setSeverity(calculateOSVSeverity(advisory));
         vuln.setCvssV2Vector(advisory.getCvssV2Vector());
+        if (advisory.getCvssV2Vector() != null) {
+            var cvss = CvssUtil.parse(advisory.getCvssV2Vector());
+            if (cvss != null) {
+                vuln.setCvssV2BaseScore(BigDecimal.valueOf(cvss.getBakedScores().getOverallScore()));
+            }
+        }
         vuln.setCvssV3Vector(advisory.getCvssV3Vector());
+        if (advisory.getCvssV3Vector() != null) {
+            var cvss = CvssUtil.parse(advisory.getCvssV3Vector());
+            if (cvss != null) {
+                vuln.setCvssV3BaseScore(BigDecimal.valueOf(cvss.getBakedScores().getOverallScore()));
+            }
+        }
         vuln.setCvssV4Vector(advisory.getCvssV4Vector());
+        if (advisory.getCvssV4Vector() != null) {
+            var cvss = CvssUtil.parse(advisory.getCvssV4Vector());
+            if (cvss != null) {
+                vuln.setCvssV4Score(BigDecimal.valueOf(cvss.getBakedScores().getOverallScore()));
+            }
+        }
         return vuln;
     }
 

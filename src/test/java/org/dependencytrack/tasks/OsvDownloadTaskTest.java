@@ -174,17 +174,17 @@ class OsvDownloadTaskTest extends PersistenceCapableTest {
                             Spring Security OAuth, versions 2.3 prior to 2.3.5, and 2.2 prior to 2.2.4, and 2.1 \
                             prior to 2.1.4, and 2.0 prior to 2.0.17, and older unsupported versions could be \
                             susceptible to an open redirector attack that can leak an authorization code.
-                            
+
                             A malicious user or attacker can craft a request to the authorization endpoint using \
                             the authorization code grant type, and specify a manipulated redirection URI via the \
                             "redirect_uri" parameter. This can cause the authorization server to redirect the \
                             resource owner user-agent to a URI under the control of the attacker with the leaked \
                             authorization code.
-                            
+
                             This vulnerability exposes applications that meet all of the following requirements: \
                             Act in the role of an Authorization Server (e.g. @EnableAuthorizationServer) and uses \
                             the DefaultRedirectResolver in the AuthorizationEndpoint.\s
-                            
+
                             This vulnerability does not expose applications that: Act in the role of an Authorization \
                             Server and uses a different RedirectResolver implementation other than \
                             DefaultRedirectResolver, act in the role of a Resource Server only \
@@ -305,6 +305,7 @@ class OsvDownloadTaskTest extends PersistenceCapableTest {
             Assertions.assertEquals(1, vulnerability.getCwes().size());
             Assertions.assertEquals(601, vulnerability.getCwes().get(0).intValue());
             Assertions.assertEquals("CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:H", vulnerability.getCvssV3Vector());
+            Assertions.assertNotNull(vulnerability.getCvssV3BaseScore());
             Assertions.assertEquals(Severity.CRITICAL, vulnerability.getSeverity());
             Assertions.assertNull(vulnerability.getCreated());
             Assertions.assertNotNull(vulnerability.getPublished());
@@ -661,7 +662,9 @@ class OsvDownloadTaskTest extends PersistenceCapableTest {
         Vulnerability vuln = task.mapAdvisoryToVulnerability(advisory);
         Assertions.assertNotNull(vuln);
         Assertions.assertEquals("CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N", vuln.getCvssV4Vector());
+        Assertions.assertNotNull(vuln.getCvssV4Score());
         Assertions.assertEquals("CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", vuln.getCvssV3Vector());
+        Assertions.assertNotNull(vuln.getCvssV3BaseScore());
         Assertions.assertEquals(Severity.CRITICAL, vuln.getSeverity());
     }
 
